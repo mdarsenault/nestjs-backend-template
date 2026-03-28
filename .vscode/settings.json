@@ -1,0 +1,14 @@
+{
+  "git.ignoreLimitWarning": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "eslint.useFlatConfig": true,
+  "eslint.validate": ["typescript", "javascript"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

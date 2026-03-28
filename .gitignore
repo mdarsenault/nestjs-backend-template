@@ -1,0 +1,11 @@
+# Dev Folders and Files
+node_modules
+dist
+logs
+
+# Security
+.env
+.env.development
+
+# Junk
+.DS_Store

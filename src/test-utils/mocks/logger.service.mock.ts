@@ -1,12 +1,14 @@
 import { LoggerService } from '@/common/logger/logger.service';
 
-export const mockLoggerService = {
+export const mockLoggerService: Pick<LoggerService, 'child'> & {
+  child: jest.Mock;
+} = {
   child: jest.fn().mockReturnValue({
     info: jest.fn(),
     error: jest.fn(),
     warn: jest.fn(),
   }),
-} as Partial<LoggerService>;
+};
 
 /*
 
@@ -16,6 +18,8 @@ import { LoggerService } from '@/common/logger/logger.service';
 import {
   mockLoggerService,
 } from '@/test-utils/mocks/logger.service.mock';
+
+let childLogger: LoggerService;
 
 beforeEach(async () => {
   jest.clearAllMocks();
@@ -43,5 +47,3 @@ beforeEach(async () => {
   devicesRepository = module.get(DevicesRepository);
   ...
 });
-
-*/

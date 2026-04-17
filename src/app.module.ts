@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { HealthModule } from './health/health.module';
 
 import appConfig from '@/config/app.config';
 import databaseConfig from '@/config/database.config';
 import environmentValidation from '@/config/environment.validation';
+
+import { LoggerModule } from './common/logger/logger.module';
+import { HealthModule } from './health/health.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -17,6 +19,7 @@ const ENV = process.env.NODE_ENV;
       load: [appConfig, databaseConfig],
       validationSchema: environmentValidation,
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,6 +33,7 @@ const ENV = process.env.NODE_ENV;
         return config;
       },
     }),
+    LoggerModule.forRoot(),
     HealthModule,
   ],
 })

@@ -1,0 +1,54 @@
+name: Pre-merge CI
+
+on:
+  pull_request:
+    branches: ['main']
+
+jobs:
+  quality-and-unit-tests:
+    name: Lint, Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm run test
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: quality-and-unit-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+
+      - name: Teardown e2e services
+        if: always()
+        run: docker compose -f docker/e2e-test/docker-compose.yml down -v

@@ -1,9 +1,9 @@
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  ModuleMetadata,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, ModuleMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '@/app.module';
@@ -13,12 +13,15 @@ import { GlobalExceptionFilter } from '@/common/filters/global-exception.filter'
 
 export async function createTestApp(
   ...extraImports: NonNullable<ModuleMetadata['imports']>
-): Promise<INestApplication> {
+): Promise<NestFastifyApplication> {
   const moduleFixture = await Test.createTestingModule({
     imports: [AppModule, ...extraImports],
   }).compile();
 
-  const app = moduleFixture.createNestApplication();
+  const app = moduleFixture.createNestApplication<NestFastifyApplication>(
+    new FastifyAdapter(),
+  );
+
   app.setGlobalPrefix('api');
   app.useGlobalPipes(createGlobalValidationPipe());
   app.useGlobalFilters(new GlobalExceptionFilter());
@@ -27,9 +30,9 @@ export async function createTestApp(
 
   try {
     await app.init();
+    await app.getHttpAdapter().getInstance().ready();
     return app;
   } catch (err) {
-    // ensure no open handles if bootstrap throws
     try {
       await app.close();
     } catch {

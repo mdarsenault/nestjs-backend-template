@@ -11,37 +11,45 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "docker:dev-up": "docker compose -f docker/local-dev/docker-compose.yml up -d",
+    "docker:dev-down": "docker compose -f docker/local-dev/docker-compose.yml down",
     "start": "nest start",
     "start:dev": "NODE_ENV=development nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint src test --ext .ts,.tsx",
-    "lint:fix": "eslint src test --ext .ts,.tsx --fix",
+    "lint": "eslint src e2e-test --ext .ts,.tsx",
+    "lint:fix": "eslint src e2e-test --ext .ts,.tsx --fix",
     "test": "NODE_ENV=test jest",
-    "test:e2e": "docker-compose -f docker/e2e-test/docker-compose.yml up -d && wait-on tcp:5433 && npm run test:e2e:raw --",
+    "test:e2e": "docker compose -f docker/e2e-test/docker-compose.yml up -d && wait-on tcp:5433 --timeout 30000 && npm run test:e2e:raw --",
     "test:e2e:raw": "NODE_ENV=test jest --runInBand --config ./e2e-test/jest-e2e.config.ts"
   },
   "dependencies": {
+    "@google/genai": "^1.50.1",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.0",
-    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/platform-fastify": "^11.0.20",
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "joi": "^17.13.3",
+    "nest-winston": "^1.10.2",
+    "openai": "^6.34.0",
     "pg": "^8.20.0",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.1.17",
-    "@types/express": "^5.0.0",
     "@types/jest": "^29.5.2",
     "@types/node": "^22.0.0",
     "@types/pg": "^8.20.0",
     "@types/supertest": "^7.2.0",
+    "@types/winston": "^2.4.4",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^4.4.3",
@@ -63,6 +71,7 @@
     "wait-on": "^8.0.3"
   },
   "overrides": {
+    "fastify": "^5.8.5",
     "path-to-regexp": "^8.2.0"
   }
 }

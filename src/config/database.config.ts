@@ -10,8 +10,8 @@ export default registerAs('database', () => {
 
   const commonConfig = {
     type: 'postgres' as const,
-    synchronize: false,
-    autoLoadEntities: false,
+    synchronize: true, // false, TODO: change to false in production
+    autoLoadEntities: true,
   };
 
   const databaseConfig = url

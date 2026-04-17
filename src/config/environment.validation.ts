@@ -12,4 +12,9 @@ export default Joi.object({
   DATABASE_PASSWORD: Joi.string().optional(),
 
   DATABASE_URL: Joi.string().allow('').optional(),
+
+  // LLM
+  LLM_OPENAI_API_KEY: Joi.string().required(),
+  LLM_GEMINI_API_KEY: Joi.string().required(),
+  LLM_GROK_API_KEY: Joi.string().required(),
 });

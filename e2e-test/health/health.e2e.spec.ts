@@ -19,7 +19,7 @@ describe('Health (e2e)', () => {
   describe('GET /health', () => {
     it('should return status ok', async () => {
       const response = await request(app.getHttpServer()).get(
-        `${API_PREFIX}/health/`,
+        `${API_PREFIX}/health`,
       );
 
       expect(response.status).toBe(200);

@@ -6,13 +6,13 @@ import { LoggerService } from '@/common/logger/logger.service';
 export class HealthService {
   private readonly logger: LoggerService;
 
-  constructor(
-    private readonly loggerService: LoggerService,
-  ) {
+  constructor(private readonly loggerService: LoggerService) {
     this.logger = this.loggerService.child('HealthService');
   }
 
   async checkHealth(): Promise<{ status: string }> {
+    this.logger.info('Health check successful');
+
     return { status: 'ok' };
   }
 }
